@@ -1,3 +1,5 @@
+import csv
+
 
 # TASK 1
 class GenomicFeature:
@@ -53,9 +55,11 @@ if __name__ == "__main__":
 
     # GenomicFeature("chr1", 5000, 1000, "+") #Testing the error
 
-# git add oop_exercise.py
+# git add oop_exercise.py           # nahrání na GitHub (mimo práci)
 # git commit -m 'Adding task 1'
 # git push
+
+
 
 # TASK 2
 class Exon(GenomicFeature):
@@ -79,3 +83,61 @@ if __name__ == "__main__":
 
     for feature in features:
         print(feature.describe())
+
+
+# TASK 3
+
+class Gene(GenomicFeature):
+    def __init__(self, chromosome, start, end, strand, name):
+        super().__init__(chromosome, start, end, strand)
+        self.name = name
+        self.exons = []
+
+        def add_exon(self, exon: Exon):
+            self.exons.append(exon)
+
+        def total_exon_length(self):
+            return sum([exon.length() for exon in self.exons])
+
+        def describe(self):
+            return f"{type(self).__name__} {self.name} {self.chromosome}:{self.start}-{self.end}({self.strand}), {len(self.exons)} exon(s)"
+
+
+class Variant(GenomicFeature):
+    def __init__(self, chromosome, start, end, strand, ref_allele, alt_allele):
+        super().__init__(chromosome, start, end, strand)
+        self.ref_allele = ref_allele
+        self.alt_allele = alt_allele
+
+        def variant_type(self):
+            if not isinstance(self.ref_allele, str) or not isinstance(self.alt_allele, str):
+                raise ValueError("ref_allele and alt_allele must be strings.")
+
+            len_ref = len(self.ref_allele)
+            len_alt = len(self.alt_allele)
+
+            if len_ref == 1 and len_alt == 1:
+                return "SNP"
+            elif len_alt > len_ref:
+                return "insertion"
+            elif len_alt < len_ref:
+                return "deletion"
+            else:
+                return "MNV"
+
+        def describe(self):
+            return f"{super().describe()} {self.ref_allele}>{self.alt_allele} ({self.variant_type()})"
+
+# TASK 3 - work with the file "oop_data.tsv"
+if __name__ == "__main__":
+    genes = {}
+    gene_list = []
+    variants = []
+
+    with open("oop_data.tsv", "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+
+
