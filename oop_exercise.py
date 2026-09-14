@@ -1,5 +1,5 @@
-# TASK 1
 
+# TASK 1
 class GenomicFeature:
     def __init__(self, chromosome, start, end, strand):
         self.chromosome = chromosome
@@ -53,5 +53,29 @@ if __name__ == "__main__":
 
     # GenomicFeature("chr1", 5000, 1000, "+") #Testing the error
 
+# git add oop_exercise.py
+# git commit -m 'Adding task 1'
+# git push
+
 # TASK 2
-issubclass(GenomicFeature, str)
+class Exon(GenomicFeature):
+    def __init__(self, chromosome, start, end, strand, exon_number):
+        super().__init__(chromosome, start, end, strand)
+
+        if not isinstance(exon_number, int):
+            raise ValueError("exon_number must be an integer.")
+        self.exon_number = exon_number
+        self.exon_number = exon_number
+
+    def describe(self):
+        return f"{super().describe()} exon #{self.exon_number}"
+
+if __name__ == "__main__":
+    features = [
+        GenomicFeature("chr1", 1000, 5000, "+"),
+        Exon("chr1", 1000, 1200, "+", 1),
+        Exon("chr1", 3000, 3300, "+", 2),
+    ]
+
+    for feature in features:
+        print(feature.describe())
